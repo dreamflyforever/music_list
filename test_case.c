@@ -125,7 +125,6 @@ music_info *music_prev_get(music_obj *obj)
 	if (obj->cur_music == NULL)
 		return NULL;
 
-	printf("LINE: %d\n", __LINE__);
 	music_info *prev = list_entry(obj->cur_music->list.prev,
 					music_info,
 					list);
@@ -251,7 +250,8 @@ int music_list_destroy(music_obj *obj)
 */
 int test_music_next_get()
 {
-	int i = 100;
+	printf("----------------test music next get----------------\n");
+	int i = 1;
 	while (i--) {
 		music_list_init(&g_m, 20);
 		music_info *tmp;
@@ -261,37 +261,56 @@ int test_music_next_get()
 		music_info_init(&tmp, "d", "e", "f");
 		music_list_insert(&g_m, tmp);
 			
+		music_info_init(&tmp, "1", "2", "3");
+		music_list_insert(&g_m, tmp);
+
+		music_info_init(&tmp, "4", "5", "6");
+		music_list_insert(&g_m, tmp);
+
 		tmp = music_cur_get(&g_m);
-		printf("cur: %s\n", tmp->artist);
+		printf("cur: %s\n", tmp->url);
 		tmp = music_next_get(&g_m);
 		if (tmp == NULL) {
 			printf("no next music\n");
-			//goto end;
 		} else {
-			printf("next: %s\n", tmp->artist);
+			printf("next url: %s\n", tmp->url);
 		}
 		music_list_destroy(&g_m);
 	}
+	printf("PASS\n");
 	return 0;
 }
 
 int test_music_prev_get()
 {
-	int i = 100;
+	printf("----------------test music prev get----------------\n");
+	int i = 1;
 	while (i--) {
 		music_list_init(&g_m, 20);
 		music_info *tmp;
 		music_info_init(&tmp, "a", "b", "c");
 		music_list_insert(&g_m, tmp);
 
+		music_info_init(&tmp, "d", "e", "f");
+		music_list_insert(&g_m, tmp);
+			
+		music_info_init(&tmp, "1", "2", "3");
+		music_list_insert(&g_m, tmp);
+
+		music_info_init(&tmp, "4", "5", "6");
+		music_list_insert(&g_m, tmp);
+
+		tmp = music_cur_get(&g_m);
+		printf("cur: %s\n", tmp->url);
 		tmp = music_prev_get(&g_m);
 		if (tmp == NULL) {
 			printf("no prev music\n");
 		} else {
-			printf("prev: %s\n", tmp->artist);
+			printf("prev url: %s\n", tmp->url);
 		}
 		music_list_destroy(&g_m);
 	}
+	printf("PASS\n");
 	return 0;
 }
 
