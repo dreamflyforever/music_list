@@ -103,7 +103,9 @@ error:
 
 music_info *music_cur_get(music_obj *obj)
 {
-	/*XXX*/
+	if (obj->cur_music == NULL)
+		return NULL;
+
 	music_info *tmp = list_entry(&obj->cur_music->list, music_info, list);
 	return (tmp)? tmp: NULL;
 }
@@ -120,10 +122,16 @@ music_info *music_next_get(music_obj *obj)
 
 music_info *music_prev_get(music_obj *obj)
 {
+	if (obj->cur_music == NULL)
+		return NULL;
+
+	printf("LINE: %d\n", __LINE__);
 	music_info *prev = list_entry(obj->cur_music->list.prev,
 					music_info,
 					list);
 	music_info *cur = music_cur_get(obj);
+	if (prev->artist == NULL)
+		return NULL;
 	return (prev == cur)? NULL: prev;
 }
 
@@ -190,7 +198,6 @@ int music_list_insert(music_obj *obj, music_info *info)
 			music_list_delete(info);
 		}
 	}
-	printf("LINE: %d\n", __LINE__);
 	list_insert_behind(&obj->head.list, &info->list);
 	obj->cur_num++;
 end:
@@ -218,7 +225,10 @@ int music_list_destroy(music_obj *obj)
 	}
 	m = list_entry(tmp, music_info, list);
 	music_list_delete(m);
-
+	
+	obj->max = 0;
+	obj->cur_num = 0;
+	obj->cur_music = NULL;
 	return 0;
 }
 
@@ -258,7 +268,7 @@ int test_music_next_get()
 			printf("no next music\n");
 			//goto end;
 		} else {
-			printf("cur: %s\n", tmp->artist);
+			printf("next: %s\n", tmp->artist);
 		}
 		music_list_destroy(&g_m);
 	}
@@ -267,6 +277,21 @@ int test_music_next_get()
 
 int test_music_prev_get()
 {
+	int i = 100;
+	while (i--) {
+		music_list_init(&g_m, 20);
+		music_info *tmp;
+		music_info_init(&tmp, "a", "b", "c");
+		music_list_insert(&g_m, tmp);
+
+		tmp = music_prev_get(&g_m);
+		if (tmp == NULL) {
+			printf("no prev music\n");
+		} else {
+			printf("prev: %s\n", tmp->artist);
+		}
+		music_list_destroy(&g_m);
+	}
 	return 0;
 }
 
@@ -274,5 +299,6 @@ int main()
 {
 	test_insert_delete_list(10, 20, 30, 30, 30);
 	test_music_next_get();
+	test_music_prev_get();
 	return 0;
 }
