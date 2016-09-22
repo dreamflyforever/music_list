@@ -114,6 +114,12 @@ int test_music_prev_get()
 	while (i--) {
 		music_list_alloc(&g_m, 20);
 		music_info *tmp;
+		int j;
+		for (j = 0; j < 21; j++) {
+			music_info_alloc(&tmp, "a", "b", "c");
+			music_list_insert(g_m, tmp);
+		}
+#if 0
 		music_info_alloc(&tmp, "a", "b", "c");
 		music_list_insert(g_m, tmp);
 
@@ -125,7 +131,7 @@ int test_music_prev_get()
 
 		music_info_alloc(&tmp, "4", "5", "6");
 		music_list_insert(g_m, tmp);
-
+#endif
 		tmp = music_cur_get(g_m);
 		printf("cur: %s\n", tmp->url);
 		while (1) {
@@ -153,7 +159,6 @@ int test_music_prev_get()
 	printf("PASS\n");
 	return 1;
 }
-
 #define CHECK_BASE_LIST(a, b, c, insert_expect, delete_expect, caculate, pass) \
 	do { \
 		caculate++; \

@@ -103,8 +103,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 	}
 
 	if (obj->cur_num > obj->max) {
-		printf("LINE: %d\n", __LINE__);
-		music_info *tmp = list_entry(&obj->head.list, music_info, list);
+		music_info *tmp = list_entry(obj->head.list.next, music_info, list);
 		music_list_delete(tmp);
 	}
 
@@ -116,7 +115,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 		m = list_entry(tmp, music_info, list);
 		if (m->url != NULL) {
 			if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-				music_list_delete(info);
+				music_list_delete(m);
 				list_insert_behind(&obj->head.list, &info->list);
 				goto end;
 			}
@@ -126,8 +125,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 	m = list_entry(tmp, music_info, list);
 	if (m->url != NULL) {
 		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-			printf("LINE: %d\n", __LINE__);
-			music_list_delete(info);
+			music_list_delete(m);
 		}
 	}
 	list_insert_behind(&obj->head.list, &info->list);
