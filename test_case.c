@@ -116,7 +116,7 @@ int test_music_prev_get()
 		music_list_alloc(&g_m, 20);
 		music_info *tmp;
 		int j;
-		for (j = 0; j < 21; j++) {
+		for (j = 0; j < 22; j++) {
 			k[0] = 'a' + j;
 			music_info_alloc(&tmp, "a", "b", k);
 			music_list_insert(g_m, tmp);
@@ -133,7 +133,8 @@ int test_music_prev_get()
 				printf("prev url: %s\n", tmp->url);
 			}
 		}
-		printf("%s-------------------------------\n", g_m->cur_music->url);
+		printf("current music: %s-------------------------------\n",
+			g_m->cur_music->url);
 		while (1) {
 			tmp = music_next_get(g_m);
 			if (tmp == NULL) {

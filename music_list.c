@@ -90,8 +90,8 @@ error:
 int music_list_insert(music_obj *obj, music_info *info)
 {
 	int retvalue = 0;
-	if ((info == NULL) || (obj == NULL) || (obj->cur_num > obj->max)) {
-		printf("error: %d\n", __LINE__);
+	if ((info == NULL) || (obj == NULL)) {
+		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 		retvalue = -1;
 		goto end;
 	}
