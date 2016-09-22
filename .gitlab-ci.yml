@@ -1,0 +1,30 @@
+stages:
+  - install_deps
+  - test
+  - build
+
+#implement dependents
+install_deps:
+  stage: install_deps
+  only:
+    - master
+  script:
+    - apt-get install clang
+
+
+#run test case
+test:
+  stage: test
+  only:
+    - master
+  script:
+    - ./test_case
+
+
+#compile
+build:
+  stage: build
+  only:
+    - master
+  script:
+    - scons
