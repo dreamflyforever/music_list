@@ -1,22 +1,23 @@
 #include "music_list.h"
 
-int music_list_init(music_obj *obj, int max)
+int music_list_alloc(music_obj **obj, int max)
 {
+	*obj = malloc(sizeof(music_obj));
 	int retvalue = 0;
 
-	if ((obj == NULL) || (max == 0)) {
+	if ((*obj == NULL) || (max == 0)) {
 		printf("error: %d\n", __LINE__);
 		retvalue = -1;
 		goto error;
 	}
 
-	list_init(&obj->head.list);
-	obj->head.title = NULL;
-	obj->head.artist = NULL;
-	obj->head.url = NULL;
-	obj->max = max;
-	obj->cur_num = 0;
-	obj->cur_music = NULL;
+	list_init(&(*obj)->head.list);
+	(*obj)->head.title = NULL;
+	(*obj)->head.artist = NULL;
+	(*obj)->head.url = NULL;
+	(*obj)->max = max;
+	(*obj)->cur_num = 0;
+	(*obj)->cur_music = NULL;
 error:	
 	return retvalue;
 }
@@ -135,7 +136,7 @@ end:
 	return retvalue;
 }
 
-int music_info_init(music_info **info, char *title, char *artist, char *url)
+int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 {
 	/*XXX*/
 	*info = malloc(sizeof(music_info));
@@ -160,5 +161,7 @@ int music_list_destroy(music_obj *obj)
 	obj->max = 0;
 	obj->cur_num = 0;
 	obj->cur_music = NULL;
+	free(obj);
+	obj = NULL;
 	return 0;
 }
