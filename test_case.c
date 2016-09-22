@@ -118,10 +118,8 @@ music_info *music_next_get(music_obj *obj)
 
 	music_info *cur = music_cur_get(obj);
 	if (next == cur) {
-		printf("LINE: %d\n", __LINE__);
 		return NULL;
 	} else {
-		printf("LINE: %d\n", __LINE__);
 		obj->cur_music = next;
 		return next;
 	}
@@ -307,6 +305,17 @@ int test_music_prev_get()
 			} else {
 				printf("prev url: %s\n", tmp->url);
 			}
+		}
+		printf("%s-------------------------------\n", g_m.cur_music->url);
+		while (1) {
+			tmp = music_next_get(&g_m);
+			if (tmp == NULL) {
+				printf("no next music\n");
+				break;
+			} else {
+				printf("next url: %s\n", tmp->url);
+			}
+
 		}
 		music_list_destroy(&g_m);
 	}
