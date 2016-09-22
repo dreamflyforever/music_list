@@ -117,21 +117,35 @@ music_info *music_next_get(music_obj *obj)
 					list);
 
 	music_info *cur = music_cur_get(obj);
-	return (next == cur)? NULL: next;
+	if (next == cur) {
+		printf("LINE: %d\n", __LINE__);
+		return NULL;
+	} else {
+		printf("LINE: %d\n", __LINE__);
+		obj->cur_music = next;
+		return next;
+	}
 }
 
 music_info *music_prev_get(music_obj *obj)
 {
-	if (obj->cur_music == NULL)
+	if (obj->cur_music == NULL) {
 		return NULL;
-
+	}
 	music_info *prev = list_entry(obj->cur_music->list.prev,
 					music_info,
 					list);
 	music_info *cur = music_cur_get(obj);
-	if (prev->artist == NULL)
+	if (prev->artist == NULL) {
 		return NULL;
-	return (prev == cur)? NULL: prev;
+	}
+	
+	if (prev == cur) {
+		return NULL;
+	} else {
+		obj->cur_music = prev;
+		return prev;
+	}
 }
 
 int music_list_delete(music_info *info)
@@ -231,23 +245,6 @@ int music_list_destroy(music_obj *obj)
 	return 0;
 }
 
-/*
-==11124== 
-==11124== HEAP SUMMARY:
-==11124==     in use at exit: 8,000 bytes in 200 blocks
-==11124==   total heap usage: 800 allocs, 600 frees, 9,200 bytes allocated
-==11124== 
-==11124== LEAK SUMMARY:
-==11124==    definitely lost: 4,000 bytes in 100 blocks
-==11124==    indirectly lost: 3,960 bytes in 99 blocks
-==11124==      possibly lost: 0 bytes in 0 blocks
-==11124==    still reachable: 40 bytes in 1 blocks
-==11124==         suppressed: 0 bytes in 0 blocks
-==11124== Rerun with --leak-check=full to see details of leaked memory
-==11124== 
-==11124== For counts of detected and suppressed errors, rerun with: -v
-==11124== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-*/
 int test_music_next_get()
 {
 	printf("----------------test music next get----------------\n");
@@ -302,11 +299,14 @@ int test_music_prev_get()
 
 		tmp = music_cur_get(&g_m);
 		printf("cur: %s\n", tmp->url);
-		tmp = music_prev_get(&g_m);
-		if (tmp == NULL) {
-			printf("no prev music\n");
-		} else {
-			printf("prev url: %s\n", tmp->url);
+		while (1) {
+			tmp = music_prev_get(&g_m);
+			if (tmp == NULL) {
+				printf("no prev music\n");
+				break;
+			} else {
+				printf("prev url: %s\n", tmp->url);
+			}
 		}
 		music_list_destroy(&g_m);
 	}
