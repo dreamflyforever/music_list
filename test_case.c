@@ -72,7 +72,7 @@ typedef struct music_info_t {
 } music_info;
 
 typedef struct music_obj_t {
-	LIST head;
+	music_info head;
 	int max;
 	int cur_num;
 	music_info *cur_music;
@@ -90,7 +90,10 @@ int music_list_init(music_obj *obj, int max)
 		goto error;
 	}
 
-	list_init(&obj->head);
+	list_init(&obj->head.list);
+	obj->head.title = NULL;
+	obj->head.artist = NULL;
+	obj->head.url = NULL;
 	obj->max = max;
 	obj->cur_num = 0;
 	obj->cur_music = NULL;
@@ -107,6 +110,13 @@ music_info *music_next_get(music_obj *obj)
 music_info *music_prev_get(music_obj *obj)
 {
 	music_info *tmp = list_entry(obj->cur_music->list.prev, music_info, list);
+	return (tmp)? tmp: NULL;
+}
+
+music_info *music_cur_get(music_obj *obj)
+{
+	/*XXX*/
+	music_info *tmp = list_entry(&obj->cur_music->list, music_info, list);
 	return (tmp)? tmp: NULL;
 }
 
@@ -138,40 +148,56 @@ int music_list_insert(music_obj *obj, music_info *info)
 		retvalue = -1;
 		goto end;
 	}
-	if (info->url) {
+
+	if (NULL == info->url) {
 		printf("error: %d\n", __LINE__);
 		retvalue = -1;
 		goto end;
 	}
 
 	if (obj->cur_num > obj->max) {
-		music_info *tmp = list_entry(&obj->head, music_info, list);
+		printf("LINE: %d\n", __LINE__);
+		music_info *tmp = list_entry(&obj->head.list, music_info, list);
 		music_list_delete(tmp);
 	}
 
 	obj->cur_music = info;
 
-	LIST *tmp = &obj->head;
+	LIST *tmp = &obj->head.list;
 	music_info *m;
 	while (!is_list_last(tmp)) {
 		m = list_entry(tmp, music_info, list);
-
-		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-			music_list_delete(info);
-			list_insert_behind(&obj->head, &info->list);
-			goto end;
+		if (m->url != NULL) {
+			if (0 == strncmp(m->url, info->url, strlen(info->url))) {
+				music_list_delete(info);
+				list_insert_behind(&obj->head.list, &info->list);
+				goto end;
+			}
 		}
-
 		tmp = tmp->next;
 	}
 	m = list_entry(tmp, music_info, list);
-	if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-		music_list_delete(info);
+	if (m->url != NULL) {
+		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
+			printf("LINE: %d\n", __LINE__);
+			music_list_delete(info);
+		}
 	}
-	list_insert_behind(&obj->head, &info->list);
+	printf("LINE: %d\n", __LINE__);
+	list_insert_behind(&obj->head.list, &info->list);
 	obj->cur_num++;
 end:
 	return retvalue;
+}
+
+int music_info_init(music_info **info, char *title, char *artist, char *url)
+{
+	/*XXX*/
+	*info = malloc(sizeof(music_info));
+	(*info)->title = strdup(title);
+	(*info)->artist = strdup(artist);
+	(*info)->url = strdup(url);
+	return 0;
 }
 
 int main()
@@ -179,6 +205,16 @@ int main()
 	test_insert_delete_list(10, 20, 30, 30, 30);
 
 	music_list_init(&g_m, 20);
-	//music_list_insert();
+	music_info *tmp;
+	music_info_init(&tmp, "a", "b", "c");
+	music_list_insert(&g_m, tmp);
+
+	music_info_init(&tmp, "d", "e", "f");
+	music_list_insert(&g_m, tmp);
+		
+	tmp = music_cur_get(&g_m);
+	printf("cur: %s\n", tmp->artist);
+	tmp = music_next_get(&g_m);
+	printf("cur: %s\n", tmp->artist);
 	return 0;
 }
