@@ -1,6 +1,5 @@
 /*
  * Test double list function
- * 
  */
 #include "music_list.h"
 
@@ -10,7 +9,7 @@ typedef struct TEST {
 
 } TEST;
 
-void test_insert_delete_list(int input_a,
+int test_insert_delete_list(int input_a,
 				int input_b,
 				int input_c,
 				int insert_expect,
@@ -22,6 +21,8 @@ void test_insert_delete_list(int input_a,
 	a.num = input_a;
 	b.num = input_b;
 	c.num = input_c;
+
+	int result = 0;
 
 	printf("----------------test list insert----------------\n");
 	list_init(&a.task_list);
@@ -39,8 +40,10 @@ void test_insert_delete_list(int input_a,
 	printf("%d\n", d->num);
 	if (d->num == insert_expect) {
 		printf("[out == expect] PASS\n");
+		result++;
 	} else {
 		printf("[out == expect] FAIL\n");
+		result--;
 	}
 
 	printf("----------------test list delete-----------------\n");
@@ -55,9 +58,17 @@ void test_insert_delete_list(int input_a,
 	printf("%d\n", d->num);
 	if (d->num == delete_expect) {
 		printf("[out == expect] PASS\n");
+		result++;
 	} else {
 		printf("[out == expect] FAIL\n");
+		result--;
 	}
+	if (result == 2)
+		result = 1;
+	else
+		result = 0;
+
+	return result;
 }
 
 int test_music_next_get()
@@ -82,6 +93,7 @@ int test_music_next_get()
 
 		tmp = music_cur_get(g_m);
 		printf("cur: %s\n", tmp->url);
+
 		tmp = music_next_get(g_m);
 		if (tmp == NULL) {
 			printf("no next music\n");
@@ -91,7 +103,7 @@ int test_music_next_get()
 		music_list_destroy(g_m);
 	}
 	printf("PASS\n");
-	return 0;
+	return 1;
 }
 
 int test_music_prev_get()
@@ -139,13 +151,44 @@ int test_music_prev_get()
 		music_list_destroy(g_m);
 	}
 	printf("PASS\n");
-	return 0;
+	return 1;
 }
+
+#define CHECK_BASE_LIST(a, b, c, insert_expect, delete_expect, caculate, pass) \
+	do { \
+		caculate++; \
+		pass += test_insert_delete_list(a, b, c, insert_expect, delete_expect); \
+	} while (0);
+
+#define CHECK_MUSIC_NEXT_GET(caculate, pass) \
+	do { \
+		caculate++; \
+		pass += test_music_next_get(); \
+	} while (0);
+
+#define CHECK_MUSIC_PREV_GET(caculate, pass) \
+	do {\
+		caculate++; \
+		pass += test_music_prev_get(); \
+	} while (0);
 
 int main()
 {
-	test_insert_delete_list(10, 20, 30, 30, 30);
-	test_music_next_get();
-	test_music_prev_get();
-	return 0;
+	int pass = 0, all = 0;
+	int retvalue;
+
+	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
+	CHECK_MUSIC_NEXT_GET(all, pass);
+	CHECK_MUSIC_PREV_GET(all, pass);
+
+	printf("\nAll Test Done!\n\n");
+	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
+	if (pass != all) {
+		printf("!!! TEST FAIL !!!\n\n");
+		retvalue = -1;
+	} else {
+		printf("$$$ TEST PASS $$$\n\n");
+		retvalue = 0;
+	}
+	return retvalue;
 }
