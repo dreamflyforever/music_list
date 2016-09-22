@@ -101,22 +101,28 @@ error:
 	return retvalue;
 }
 
-music_info *music_next_get(music_obj *obj)
-{
-	music_info *tmp = list_entry(obj->cur_music->list.next, music_info, list);
-	return (tmp)? tmp: NULL;
-}
-
-music_info *music_prev_get(music_obj *obj)
-{
-	music_info *tmp = list_entry(obj->cur_music->list.prev, music_info, list);
-	return (tmp)? tmp: NULL;
-}
-
 music_info *music_cur_get(music_obj *obj)
 {
 	/*XXX*/
 	music_info *tmp = list_entry(&obj->cur_music->list, music_info, list);
+	return (tmp)? tmp: NULL;
+}
+
+music_info *music_next_get(music_obj *obj)
+{
+	music_info *next = list_entry(obj->cur_music->list.next,
+					music_info,
+					list);
+
+	music_info *cur = music_cur_get(obj);
+	return (next == cur)? NULL: next;
+}
+
+music_info *music_prev_get(music_obj *obj)
+{
+	music_info *tmp = list_entry(obj->cur_music->list.prev,
+					music_info,
+					list);
 	return (tmp)? tmp: NULL;
 }
 
@@ -215,6 +221,11 @@ int main()
 	tmp = music_cur_get(&g_m);
 	printf("cur: %s\n", tmp->artist);
 	tmp = music_next_get(&g_m);
+	if (tmp == NULL) {
+		printf("no next music\n");
+		goto end;
+	}
 	printf("cur: %s\n", tmp->artist);
+end:
 	return 0;
 }
