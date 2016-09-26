@@ -77,13 +77,13 @@ int music_list_delete(music_info *info)
 	}
 
 	list_delete(&info->list);
-	free(info);
 	free(info->title);
 	info->title = NULL;
 	free(info->artist);
 	info->artist = NULL;
 	free(info->url);
 	info->url = NULL;
+	free(info);
 
 error:
 	return retvalue;
@@ -167,10 +167,7 @@ int music_list_destroy(music_obj *obj)
 	while (!is_list_last(tmp)) {
 		m = list_entry(tmp, music_info, list);
 		tmp = tmp->next;
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
-		printf("m->url: %s\n", m->url);
 		music_list_delete(m);
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	}
 	m = list_entry(tmp, music_info, list);
 	if (m == NULL)
