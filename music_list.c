@@ -6,7 +6,7 @@ int music_list_alloc(music_obj **obj, int max)
 	int retvalue = 0;
 
 	if ((*obj == NULL) || (max == 0)) {
-		printf("error: %d\n", __LINE__);
+		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 		retvalue = -1;
 		goto error;
 	}
@@ -55,7 +55,7 @@ music_info *music_prev_get(music_obj *obj)
 					music_info,
 					list);
 	music_info *cur = music_cur_get(obj);
-	if (prev->artist == NULL) {
+	if (prev->url == NULL) {
 		return NULL;
 	}
 	
@@ -71,12 +71,13 @@ int music_list_delete(music_info *info)
 {
 	int retvalue = 0;
 	if (info == NULL) {
-		printf("error: %d\n", __LINE__);
+		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 		retvalue = -1;
 		goto error;
 	}
 
 	list_delete(&info->list);
+	free(info);
 	free(info->title);
 	info->title = NULL;
 	free(info->artist);
@@ -97,7 +98,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 	}
 
 	if (NULL == info->url) {
-		printf("error: %d\n", __LINE__);
+		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 		retvalue = -1;
 		goto end;
 	}
@@ -126,6 +127,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 	if (m->url != NULL) {
 		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
 			music_list_delete(m);
+			obj->cur_num--;
 		}
 	}
 	list_insert_behind(&obj->head.list, &info->list);
