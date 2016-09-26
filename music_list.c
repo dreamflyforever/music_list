@@ -106,6 +106,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 	if (obj->cur_num > obj->max) {
 		music_info *tmp = list_entry(obj->head.list.next, music_info, list);
 		music_list_delete(tmp);
+		obj->cur_num--;
 	}
 
 	obj->cur_music = info;
