@@ -92,7 +92,7 @@ int test_music_next_get()
 		music_list_insert(g_m, tmp);
 
 		tmp = music_cur_get(g_m);
-		printf("cur: %s\n", tmp->url);
+		printf("cur url: %s\n", tmp->url);
 
 		tmp = music_next_get(g_m);
 		if (tmp == NULL) {
@@ -138,7 +138,7 @@ int test_music_prev_get()
 		while (1) {
 			tmp = music_next_get(g_m);
 			if (tmp == NULL) {
-				printf("no next music\n");
+				printf("no prev music\n");
 				break;
 			} else {
 				printf("next url: %s\n", tmp->url);
