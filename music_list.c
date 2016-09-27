@@ -172,9 +172,10 @@ int music_list_destroy(music_obj *obj)
 	m = list_entry(tmp, music_info, list);
 	if (m == NULL)
 		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
-		
-	music_list_delete(m);
-	
+
+	if (m->url != NULL)
+		music_list_delete(m);
+
 	obj->max = 0;
 	obj->cur_num = 0;
 	obj->cur_music = NULL;
