@@ -8,6 +8,28 @@ typedef struct TEST {
 	int num;
 } TEST;
 
+int test_music_list_alloc_destroy()
+{
+	music_obj *g_m;
+	music_list_alloc(&g_m, 20);
+	music_list_destroy(g_m);
+	music_list_alloc(&g_m, 20);
+
+	music_info *tmp;
+	music_info_alloc(&tmp, "a", "b", "c");
+	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
+	music_list_insert(g_m, tmp);
+	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
+
+	music_info_alloc(&tmp, "e", "f", "g");
+	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
+	music_list_insert(g_m, tmp);
+	tmp = music_cur_get(g_m);
+	printf("current url: %s\n", tmp->url);
+
+	return 1;
+}
+
 int test_music_list_destroy()
 {
 	music_obj *g_m;
@@ -29,6 +51,7 @@ int test_music_cur_get()
 	}
 	return ret;
 }
+
 int test_insert_delete_list(int input_a,
 				int input_b,
 				int input_c,
@@ -45,10 +68,10 @@ int test_insert_delete_list(int input_a,
 	int result = 0;
 
 	printf("----------------test list insert----------------\n");
-	list_init(&a.task_list);
-	list_insert(&a.task_list, &b.task_list);
+	_list_init(&a.task_list);
+	_list_insert(&a.task_list, &b.task_list);
 	//list_insert_spec(&a.task_list, &c.task_list);
-	list_insert(&b.task_list, &c.task_list);
+	_list_insert(&b.task_list, &c.task_list);
 	LIST *tmp = &a.task_list;
 	TEST *d;
 	while (!is_list_last(tmp)) {
@@ -67,7 +90,7 @@ int test_insert_delete_list(int input_a,
 	}
 
 	printf("----------------test list delete-----------------\n");
-	list_delete(&b.task_list);
+	_list_delete(&b.task_list);
 	tmp = &a.task_list;
 	while (!is_list_last(tmp)) {
 		d = list_entry(tmp, TEST, task_list);
@@ -111,6 +134,9 @@ int test_music_next_get()
 		music_info_alloc(&tmp, "4", "5", "6");
 		music_list_insert(g_m, tmp);
 
+		music_info_alloc(&tmp, "4", "5", "6");
+		music_list_insert(g_m, tmp);
+		
 		tmp = music_cur_get(g_m);
 		printf("cur url: %s\n", tmp->url);
 
@@ -219,6 +245,7 @@ int main()
 		printf("$$$ TEST PASS $$$\n\n");
 		retvalue = 0;
 	}
+	//test_music_list_alloc_destroy();
 
 	return retvalue;
 }

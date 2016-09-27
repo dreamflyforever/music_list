@@ -18,11 +18,11 @@ typedef struct LIST {
 	struct LIST *next;
 } LIST;
 
-void list_init(LIST *head);
-void list_insert(LIST *head, LIST *node);
-void list_insert_spec(LIST * head, LIST *node);
-void list_delete(LIST *node);
+void _list_init(LIST *head);
+void _list_insert(LIST *head, LIST *node);
+void _list_insert_spec(LIST * head, LIST *node);
+void _list_delete(LIST *node);
 BOOL is_list_last(LIST *node);
-void list_insert_behind(LIST *head, LIST *node);
+void _list_insert_behind(LIST *head, LIST *node);
 
 #endif
