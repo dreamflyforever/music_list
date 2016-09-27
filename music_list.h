@@ -19,7 +19,6 @@ typedef struct music_obj_t {
 } music_obj;
 
 int music_list_alloc(music_obj **obj, int max);
-int music_list_delete(music_info *info);
 int music_list_insert(music_obj *obj, music_info *info);
 int music_info_alloc(music_info **info, char *title, char *artist, char *url);
 int music_list_destroy(music_obj *obj);
