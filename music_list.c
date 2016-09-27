@@ -155,7 +155,7 @@ int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 
 	(*info)->url = strdup(url);
-	if ((*info)->url)
+	if ((*info)->url == NULL)
 		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	return 0;
 }
