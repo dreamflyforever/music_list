@@ -9,6 +9,19 @@ typedef struct TEST {
 
 } TEST;
 
+int test_music_cur_get()
+{
+	int ret = 0;
+	music_obj *g_m;
+	music_info *tmp;
+	music_list_alloc(&g_m, 20);
+	tmp = music_cur_get(g_m);
+	if (tmp == NULL) {
+		ret = 1;
+		printf("current music is HEAD\n");
+	}
+	return ret;
+}
 int test_insert_delete_list(int input_a,
 				int input_b,
 				int input_c,
@@ -168,6 +181,12 @@ int test_music_prev_get()
 		pass += test_music_prev_get(); \
 	} while (0);
 
+#define CHECK_MUSIC_CUR_GET(caculate, pass) \
+	do {\
+		caculate++; \
+		pass += test_music_cur_get(); \
+	} while (0);
+
 int main()
 {
 	int pass = 0, all = 0;
@@ -176,6 +195,7 @@ int main()
 	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
 	CHECK_MUSIC_NEXT_GET(all, pass);
 	CHECK_MUSIC_PREV_GET(all, pass);
+	CHECK_MUSIC_CUR_GET(all, pass);
 
 	printf("\nAll Test Done!\n\n");
 	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
@@ -186,5 +206,6 @@ int main()
 		printf("$$$ TEST PASS $$$\n\n");
 		retvalue = 0;
 	}
+
 	return retvalue;
 }
