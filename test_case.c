@@ -241,12 +241,12 @@ int main()
 {
 	int pass = 0, all = 0;
 	int retvalue;
-	//CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
+	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
 	CHECK_MUSIC_NEXT_GET(all, pass);
-//	CHECK_MUSIC_PREV_GET(all, pass);
-//	CHECK_MUSIC_CUR_GET(all, pass);
-//	CHECK_MUSIC_LIST_DESTROY(all, pass);
-//	CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
+	CHECK_MUSIC_PREV_GET(all, pass);
+	CHECK_MUSIC_CUR_GET(all, pass);
+	CHECK_MUSIC_LIST_DESTROY(all, pass);
+	CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
 
 	printf("\nAll Test Done!\n\n");
 	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
