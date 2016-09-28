@@ -10,23 +10,20 @@ typedef struct TEST {
 
 int test_music_list_alloc_destroy()
 {
-	music_obj *g_m;
-	music_list_alloc(&g_m, 20);
-	music_list_destroy(g_m);
-	music_list_alloc(&g_m, 20);
+	int i = 100;
+	while (i--) {
+		music_obj *g_m;
+		music_list_alloc(&g_m, 20);
 
-	music_info *tmp;
-	music_info_alloc(&tmp, "a", "b", "c");
-	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
-	music_list_insert(g_m, tmp);
-	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		music_info *tmp;
+		music_info_alloc(&tmp, "e", "f", "g");
+		music_list_insert(g_m, tmp);
+		tmp = music_cur_get(g_m);
+		printf("current url: %s\n", tmp->url);
 
-	music_info_alloc(&tmp, "e", "f", "g");
-	printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
-	music_list_insert(g_m, tmp);
-	tmp = music_cur_get(g_m);
-	printf("current url: %s\n", tmp->url);
-
+		music_list_destroy(&g_m);
+		music_list_destroy(&g_m);
+	}
 	return 1;
 }
 
@@ -34,7 +31,7 @@ int test_music_list_destroy()
 {
 	music_obj *g_m;
 	music_list_alloc(&g_m, 20);
-	music_list_destroy(g_m);
+	music_list_destroy(&g_m);
 	return 1;
 }
 
@@ -120,7 +117,7 @@ int test_music_next_get()
 	printf("----------------test music next get----------------\n");
 	int i = 1;
 	while (i--) {
-		music_list_alloc(&g_m, 20);
+		music_list_alloc(&g_m, 3);
 		music_info *tmp;
 		music_info_alloc(&tmp, "a", "b", "c");
 		music_list_insert(g_m, tmp);
@@ -136,19 +133,27 @@ int test_music_next_get()
 
 		music_info_alloc(&tmp, "4", "5", "6");
 		music_list_insert(g_m, tmp);
-		
-		tmp = music_cur_get(g_m);
-		printf("cur url: %s\n", tmp->url);
 
+#if 1
+		music_info_alloc(&tmp, "4", "5", "1");
+		music_list_insert_head(g_m, tmp);
+
+		music_info_alloc(&tmp, "4", "5", "2");
+		music_list_insert_head(g_m, tmp);
+#endif
+		tmp = music_cur_get(g_m);
+		printf("---------> cur url: %s\n", tmp->url);
+circle:
 		tmp = music_next_get(g_m);
 		if (tmp == NULL) {
-			printf("no next music\n");
+			printf("no prev music\n");
 		} else {
-			printf("next url: %s\n", tmp->url);
+			printf("--------->prev url: %s\n", tmp->url);
+			goto circle;
 		}
-		music_list_destroy(g_m);
+		music_list_destroy(&g_m);
 	}
-	printf("PASS\n");
+	printf("[%s %s %d] PASS\n", __FILE__, __func__, __LINE__);
 	return 1;
 }
 
@@ -191,9 +196,9 @@ int test_music_prev_get()
 			}
 
 		}
-		music_list_destroy(g_m);
+		music_list_destroy(&g_m);
 	}
-	printf("PASS\n");
+	printf("[%s %s %d] PASS\n", __FILE__, __func__, __LINE__);
 	return 1;
 }
 #define CHECK_BASE_LIST(a, b, c, insert_expect, delete_expect, caculate, pass) \
@@ -226,15 +231,22 @@ int test_music_prev_get()
 		pass += test_music_list_destroy(); \
 	} while (0);
 
+#define CHECK_MUSIC_LIST_ALLOC_DESTROY(caculate, pass) \
+	do {\
+		caculate++; \
+		pass += test_music_list_alloc_destroy(); \
+	} while (0);
+
 int main()
 {
 	int pass = 0, all = 0;
 	int retvalue;
-	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
+	//CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
 	CHECK_MUSIC_NEXT_GET(all, pass);
-	CHECK_MUSIC_PREV_GET(all, pass);
-	CHECK_MUSIC_CUR_GET(all, pass);
-	CHECK_MUSIC_LIST_DESTROY(all, pass);
+	//CHECK_MUSIC_PREV_GET(all, pass);
+	//CHECK_MUSIC_CUR_GET(all, pass);
+	//CHECK_MUSIC_LIST_DESTROY(all, pass);
+	//CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
 
 	printf("\nAll Test Done!\n\n");
 	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
@@ -245,7 +257,6 @@ int main()
 		printf("$$$ TEST PASS $$$\n\n");
 		retvalue = 0;
 	}
-	//test_music_list_alloc_destroy();
 
 	return retvalue;
 }
