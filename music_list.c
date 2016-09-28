@@ -25,7 +25,8 @@ error:
 
 music_info *music_cur_get(music_obj *obj)
 {
-	printf("[%s %s %d]  obj : %x, obj->cur_music: %x\n", __FILE__, __func__, __LINE__,
+	printf("[%s %s %d]  obj : %x, obj->cur_music: %x\n",
+		__FILE__, __func__, __LINE__,
 		obj, obj->cur_music);
 	if (obj->cur_music == NULL)
 		return NULL;
@@ -97,7 +98,8 @@ int music_list_delete(music_obj *obj, music_info *info)
 			if (0 == strncmp(m->url,
 					info->url,
 					strlen(info->url))) {
-				printf("delete [%s %s %d]\n", __FILE__, __func__, __LINE__);
+				printf("delete [%s %s %d]info: %x, m: %d\n", __FILE__, __func__, __LINE__,
+					info, m);
 				goto end;
 			}
 		}
@@ -116,15 +118,15 @@ int music_list_delete(music_obj *obj, music_info *info)
 	return retvalue;
 end:
 	printf("delete: [%s %s %d]info addr : %x\n", __FILE__, __func__, __LINE__, info);
-	_list_delete(&info->list);
-	free(info->title);
-	info->title = NULL;
-	free(info->artist);
-	info->artist = NULL;
-	free(info->url);
-	info->url = NULL;
-	free(info);
-	info = NULL;
+	_list_delete(&m->list);
+	free(m->title);
+	m->title = NULL;
+	free(m->artist);
+	m->artist = NULL;
+	free(m->url);
+	m->url = NULL;
+	free(m);
+	m = NULL;
 error:
 	return retvalue;
 }
@@ -253,7 +255,7 @@ int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 int music_list_destroy(music_obj **obj)
 {
 	if (*obj == NULL) {
-		printf("[%s %s %d] error\n", __FILE__, __func__, __LINE__);
+		printf("[%s %s %d] input obj == NULL\n", __FILE__, __func__, __LINE__);
 		return 0;
 	}
 

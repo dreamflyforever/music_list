@@ -46,6 +46,7 @@ int test_music_cur_get()
 		ret = 1;
 		printf("current music is HEAD\n");
 	}
+	music_list_destroy(&g_m);
 	return ret;
 }
 
@@ -115,7 +116,7 @@ int test_music_next_get()
 {
 	music_obj *g_m;
 	printf("----------------test music next get----------------\n");
-	int i = 1;
+	int i = 100;
 	while (i--) {
 		music_list_alloc(&g_m, 3);
 		music_info *tmp;
@@ -241,12 +242,12 @@ int main()
 {
 	int pass = 0, all = 0;
 	int retvalue;
-	//CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
+	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
 	CHECK_MUSIC_NEXT_GET(all, pass);
-	//CHECK_MUSIC_PREV_GET(all, pass);
-	//CHECK_MUSIC_CUR_GET(all, pass);
-	//CHECK_MUSIC_LIST_DESTROY(all, pass);
-	//CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
+	CHECK_MUSIC_PREV_GET(all, pass);
+	CHECK_MUSIC_CUR_GET(all, pass);
+	CHECK_MUSIC_LIST_DESTROY(all, pass);
+	CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
 
 	printf("\nAll Test Done!\n\n");
 	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
