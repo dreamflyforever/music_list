@@ -22,7 +22,6 @@ int test_music_list_alloc_destroy()
 		printf("current url: %s\n", tmp->url);
 
 		music_list_destroy(&g_m);
-		music_list_destroy(&g_m);
 	}
 	return 1;
 }
@@ -117,15 +116,15 @@ int test_music_next_get()
 	music_obj *g_m;
 	printf("----------------test music next get----------------\n");
 	int i = 100;
+	music_info *tmp;
+	music_list_alloc(&g_m, 3);
 	while (i--) {
-		music_list_alloc(&g_m, 3);
-		music_info *tmp;
 		music_info_alloc(&tmp, "a", "b", "c");
 		music_list_insert(g_m, tmp);
 
 		music_info_alloc(&tmp, "d", "e", "f");
 		music_list_insert(g_m, tmp);
-			
+
 		music_info_alloc(&tmp, "1", "2", "3");
 		music_list_insert(g_m, tmp);
 
@@ -134,7 +133,6 @@ int test_music_next_get()
 
 		music_info_alloc(&tmp, "4", "5", "6");
 		music_list_insert(g_m, tmp);
-
 #if 1
 		music_info_alloc(&tmp, "4", "5", "1");
 		music_list_insert_head(g_m, tmp);
@@ -142,18 +140,19 @@ int test_music_next_get()
 		music_info_alloc(&tmp, "4", "5", "2");
 		music_list_insert_head(g_m, tmp);
 #endif
-		tmp = music_cur_get(g_m);
-		printf("---------> cur url: %s\n", tmp->url);
-circle:
-		tmp = music_next_get(g_m);
-		if (tmp == NULL) {
-			printf("no prev music\n");
-		} else {
-			printf("--------->prev url: %s\n", tmp->url);
-			goto circle;
-		}
-		music_list_destroy(&g_m);
 	}
+	tmp = music_cur_get(g_m);
+	printf("---------> cur url: %s\n", tmp->url);
+circle:
+	tmp = music_next_get(g_m);
+	if (tmp == NULL) {
+		printf("no prev music\n");
+	} else {
+		printf("--------->prev url: %s\n", tmp->url);
+		goto circle;
+	}
+	music_list_destroy(&g_m);
+
 	printf("[%s %s %d] PASS\n", __FILE__, __func__, __LINE__);
 	return 1;
 }
@@ -242,12 +241,12 @@ int main()
 {
 	int pass = 0, all = 0;
 	int retvalue;
-	CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
+	//CHECK_BASE_LIST(10, 20, 30, 30, 30, all, pass);
 	CHECK_MUSIC_NEXT_GET(all, pass);
-	CHECK_MUSIC_PREV_GET(all, pass);
-	CHECK_MUSIC_CUR_GET(all, pass);
-	CHECK_MUSIC_LIST_DESTROY(all, pass);
-	CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
+//	CHECK_MUSIC_PREV_GET(all, pass);
+//	CHECK_MUSIC_CUR_GET(all, pass);
+//	CHECK_MUSIC_LIST_DESTROY(all, pass);
+//	CHECK_MUSIC_LIST_ALLOC_DESTROY(all, pass);
 
 	printf("\nAll Test Done!\n\n");
 	printf("Result: %2d/%2d [PASS/TOTAL]\n\n", pass, all);
