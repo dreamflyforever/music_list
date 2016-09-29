@@ -302,15 +302,16 @@ int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 	else
 		(*info)->title = strdup("null");
 
-	if (artist != NULL)
+	if (artist != NULL) {
 		(*info)->artist = strdup(artist);
-	else
-		(*info)->title = strdup("null");
+	} else {
+		(*info)->artist = strdup("null");
+	}
 
 	if (url != NULL)
 		(*info)->url = strdup(url);
 	else
-		(*info)->title = strdup("null");
+		(*info)->url = strdup("null");
 
 	printf("[%s %s %d] info: %x\n", __FILE__, __func__, __LINE__, *info);
 	return retvalue;;
