@@ -39,8 +39,10 @@ music_info *music_next_get(music_obj *obj)
 {
 	if (obj == NULL)
 		return NULL;
+	if (obj->cur_music == NULL)
+		return NULL;
 	printf("[%s %s %d]  obj : %x, obj->cur_music: %x\n", __FILE__, __func__, __LINE__,
-		obj, obj->cur_music->list.next);
+		obj, obj->cur_music);
 	music_info *next = list_entry(obj->cur_music->list.next,
 					music_info,
 					list);
