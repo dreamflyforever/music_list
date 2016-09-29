@@ -266,7 +266,8 @@ int music_list_insert(music_obj *obj, music_info *info)
 	m = list_entry(tmp, music_info, list);
 	if (m->url != NULL) {
 		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-			printf("[%s %s %d]info->url: %s, m->url: %s\n", __FILE__, __func__, __LINE__, info->url, m->url);
+			printf("[%s %s %d]info->url: %s, m->url: %s\n",
+				__FILE__, __func__, __LINE__, info->url, m->url);
 			//goto end;
 #if 1
 			music_list_delete(obj, &m);
@@ -300,12 +301,12 @@ int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 	if (title != NULL)
 		(*info)->title = strdup(title);
 	else
-		(*info)->title = strdup("null");
+		(*info)->title = strdup(" ");
 
 	if (artist != NULL) {
 		(*info)->artist = strdup(artist);
 	} else {
-		(*info)->artist = strdup("null");
+		(*info)->artist = strdup(" ");
 	}
 
 	if (url != NULL)
