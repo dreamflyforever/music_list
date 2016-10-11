@@ -146,7 +146,7 @@ int test_music_next_get()
 circle:
 	tmp = music_next_get(g_m);
 	if (tmp == NULL) {
-		printf("no prev music\n");
+		printf("no next music\n");
 	} else {
 		printf("--------->prev url: %s\n", tmp->url);
 		goto circle;

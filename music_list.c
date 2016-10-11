@@ -83,23 +83,22 @@ int music_list_delete(music_obj *obj, music_info **info)
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", (*info)->url);
+		//printf("[%s]\n", (*info)->url);
 	}
 
 	if ((*info)->artist == NULL) {
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", (*info)->artist);
+		//printf("[%s]\n", (*info)->artist);
 	}
 
 	if ((*info)->title == NULL) {
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", (*info)->title);
+		//printf("[%s]\n", (*info)->title);
 	}
-
 
 	LIST *tmp = &obj->head.list;
 	music_info *m;
@@ -128,7 +127,6 @@ int music_list_delete(music_obj *obj, music_info **info)
 				if (0 == strncmp(m->artist,
 						(*info)->artist,
 						strlen((*info)->artist))) {
-						printf("delete [%s %s %d]\n", __FILE__, __func__, __LINE__);
 						goto end;
 				}
 			}
@@ -139,18 +137,13 @@ int music_list_delete(music_obj *obj, music_info **info)
 	return retvalue;
 end:
 	_list_delete(&(*info)->list);
-		printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	free((*info)->title);
-		printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	(*info)->title = NULL;
 	free((*info)->artist);
-		printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	(*info)->artist = NULL;
 	free((*info)->url);
-		printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	(*info)->url = NULL;
 	free((*info));
-		printf("[%s %s %d]\n", __FILE__, __func__, __LINE__);
 	(*info) = NULL;
 error:
 	return retvalue;
@@ -207,21 +200,21 @@ int music_list_insert(music_obj *obj, music_info *info)
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", info->url);
+		//printf("[%s]\n", info->url);
 	}
 
 	if (info->artist == NULL) {
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", info->artist);
+		//printf("[%s]\n", info->artist);
 	}
 
 	if (info->title == NULL) {
 		printf("[%s %s %d]error: head delete\n", __FILE__, __func__, __LINE__);
 		return 0;
 	} else {
-		printf("[%s]\n", info->title);
+		//printf("[%s]\n", info->title);
 	}
 
 
@@ -246,8 +239,6 @@ int music_list_insert(music_obj *obj, music_info *info)
 	m = list_entry(tmp, music_info, list);
 	if (m->url != NULL) {
 		if (0 == strncmp(m->url, info->url, strlen(info->url))) {
-			printf("[%s %s %d]info->url: %s, m->url: %s\n",
-				__FILE__, __func__, __LINE__, info->url, m->url);
 			//goto end;
 #if 1
 			music_list_delete(obj, &m);
@@ -259,7 +250,6 @@ int music_list_insert(music_obj *obj, music_info *info)
 	obj->cur_num++;
 
 	if (obj->cur_num > obj->max) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
 		music_info *tmp = list_entry(obj->head.list.next, music_info, list);
 		music_list_delete(obj, &tmp);
 		obj->cur_num--;
