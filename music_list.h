@@ -19,6 +19,7 @@ typedef struct music_obj_t {
 	int max;
 	int cur_num;
 	music_info *cur_music;
+	music_info *cur_tmp;
 } music_obj;
 
 int music_list_alloc(music_obj **obj, int max);
