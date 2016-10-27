@@ -6,7 +6,7 @@ int music_list_alloc(music_obj **obj, int max)
 	int retvalue = 0;
 
 	if ((*obj == NULL) || (max == 0)) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto error;
 	}
@@ -27,7 +27,7 @@ int music_cur_set(music_obj *obj, music_info *m)
 {
 	int retvalue = 1;
 	if ((m == NULL) && (obj->cur_music == NULL)) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto end;
 	}
@@ -89,7 +89,7 @@ int music_list_delete(music_obj *obj, music_info **info)
 {
 	int retvalue = 0;
 	if (*info == NULL) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto error;
 	}
@@ -167,7 +167,7 @@ int music_list_insert_head(music_obj *obj, music_info *info)
 {
 	int retvalue = 0;
 	if ((info == NULL) || (obj == NULL)) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto end;
 	}
@@ -175,7 +175,7 @@ int music_list_insert_head(music_obj *obj, music_info *info)
 	obj->cur_music = info;
 
 	if (NULL == info->url) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto end;
 	}
@@ -205,7 +205,7 @@ int music_list_insert(music_obj *obj, music_info *info)
 {
 	int retvalue = 0;
 	if ((info == NULL) || (obj == NULL)) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 		goto end;
 	}
@@ -278,7 +278,7 @@ int music_info_alloc(music_info **info, char *title, char *artist, char *url)
 	/*XXX*/
 	*info = (music_info *)malloc(sizeof(music_info));
 	if (*info == NULL) {
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
+		print("error\n");
 		retvalue = -1;
 	}
 	if (title != NULL)
@@ -316,8 +316,7 @@ int music_list_destroy(music_obj **obj)
 	}
 	m = list_entry(tmp, music_info, list);
 	if (m == NULL)
-		printf("error:[%s %s %d]\n", __FILE__, __func__, __LINE__);
-
+		print("error\n");
 	if (m->url != NULL) {
 		music_list_delete((*obj), &m);
 	}

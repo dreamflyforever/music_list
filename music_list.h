@@ -7,6 +7,13 @@
 
 #include "list.h"
 
+#define print(format, ...) \
+	{ \
+		printf("[%s : %s : %d] ", \
+		__FILE__, __func__, __LINE__); \
+		printf(format, ##__VA_ARGS__); \
+	}
+
 typedef struct music_info_t {
 	LIST list;
 	char *title;
